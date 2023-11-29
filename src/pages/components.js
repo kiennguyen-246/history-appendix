@@ -1,37 +1,9 @@
 import { useState } from "react";
 import { Combobox } from "@headlessui/react";
-import { removeTone } from "./utils";
 
-const keyword = [
-    {
-        id: 1,
-        name: "cách mạng tư sản",
-        content:
-            "Cuộc cách mạng do giai cấp tư sản (hay quý tộc mới) lãnh đạo nhằm lật đổ chế độ phong kiến, thiết lập nền thống trị của giai cấp tư sản, mở đường cho sự phát triển của chủ nghĩa tư bản, theo học thuyết Mác.",
-        pageNumber: 4,
-        topic: 1,
-        textbook: "Lịch sử 11 (Cánh diều)",
-    },
-    {
-        id: 2,
-        name: "chủ nghĩa tư bản",
-        content:
-            "Là một hệ thống kinh tế dựa trên quyền sở hữu tư nhân đối với tư liệu sản xuất và hoạt động sản xuất vì lợi nhuận.",
-        pageNumber: 4,
-        topic: 1,
-        textbook: "Lịch sử 11 (Cánh diều)",
-    },
-    {
-        id: 3,
-        name: "Đồng minh",
-        content:
-            "Liên minh chính trị, quân sự quốc tế được thành lập trong Chiến tranh thế giới thứ hai, đứng đầu là Mỹ, Liên Xô, Anh nằm chiến đấu chống chủ nghĩa phát xít.",
-        pageNumber: 37,
-        topic: 3,
-        textbook: "Lịch sử 11 (Cánh diều)",
-    },
-    // More users...
-];
+const SEARCH_API = "http://localhost:3000/api/search";
+const FILTER_API = "http://localhost:3000/api/filter";
+const FEEDBACK_API = "http://localhost:3000/api/filter";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -52,12 +24,20 @@ export function Body() {
 
     const searchKeyword = async () => {
         const inputValue = document.getElementById("searchInput").value;
-        for (let i = 0; i < keyword.length; i++) {
-            if (keyword[i].name === inputValue) {
-                setFound(true);
-                setResponse(keyword[i]);
-                break;
-            }
+        const httpResponse = await fetch(SEARCH_API, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ keyword: inputValue }),
+        });
+        const json = await httpResponse.json();
+        if (json.status == 200) {
+            setFound(true);
+            setResponse(json.data);
+        } else {
+            setFound(false);
+            setResponse(null);
         }
     };
 
@@ -109,15 +89,7 @@ function SearchArea({ onSubmit }) {
 function SearchBox() {
     const [query, setQuery] = useState("");
     const [selectedKeyword, setSelectedKeyword] = useState(null);
-
-    const filteredkeyword =
-        query === ""
-            ? keyword
-            : keyword.filter((Keyword) => {
-                  return removeTone(Keyword.name)
-                      .toLowerCase()
-                      .includes(removeTone(query).toLowerCase());
-              });
+    const [filteredkeyword, setFilteredkeyword] = useState([]);
 
     return (
         <Combobox
@@ -130,9 +102,19 @@ function SearchBox() {
                 <Combobox.Input
                     className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-lime-700 focus:outline-none focus:ring-1 focus:ring-lime-700 sm:text-sm font-sans"
                     id="searchInput"
-                    onChange={(event) => {
+                    onChange={async (event) => {
                         event.preventDefault();
                         setQuery(event.target.value);
+                        const htmlResponse = await fetch(FILTER_API, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ query: event.target.value }),
+                        });
+                        const json = await htmlResponse.json();
+                        console.log(event.target.value);
+                        setFilteredkeyword(json.data);
                     }}
                     displayValue={(selectedKeyword) => {
                         return selectedKeyword ? selectedKeyword.name : query;
@@ -243,10 +225,17 @@ function FeeabackArea({ feedbackFormDisplay }) {
         <div className="mt-10 w-full bg">
             <h2 className="font-bold text-green-800 text-4xl"> Góp ý</h2>
             <form
-                onSubmit={(event) => {
+                onSubmit={async (event) => {
                     event.preventDefault();
-                    console.log(event.target.email.value);
-                    console.log(event.target.comment.value);
+                    const email = event.target.email.value;
+                    const comment = event.target.comment.value;
+                    const httpResponse = await fetch(FEEDBACK_API, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ email, comment }),
+                    });
                     alert(
                         "Ý kiến của bạn đã được ghi nhận.\nCảm ơn bạn đã góp ý!"
                     );
