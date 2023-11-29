@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Inter, Vollkorn } from "next/font/google";
+import { Metadata } from "next";
 import { Body } from "./components";
 
 const inter = Inter({ subsets: ["latin"] });

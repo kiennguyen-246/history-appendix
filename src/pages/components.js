@@ -42,6 +42,7 @@ export function Body() {
     const [response, setResponse] = useState(null);
     const [init, setInit] = useState(false);
     const [found, setFound] = useState(false);
+    const [feedbackFormDisplay, setfeedbackFormDisplay] = useState(false);
 
     const doSetQuery = async () => {
         setFound(false);
@@ -72,12 +73,18 @@ export function Body() {
             });
     };
 
+    const showFeedback = () => {
+        setfeedbackFormDisplay(true);
+    };
+
     return (
         <div className="container m-auto max-w-3xl font-['vollkorn']">
             <Heading />
             <SearchArea onSubmit={onSearch} />
             <Content init={init} found={found} response={response} />
-            <ExtraContent />
+            <FeeabackArea feedbackFormDisplay={feedbackFormDisplay} />
+            <div style={{ marginTop: "6rem" }}>.</div>
+            <Footer showFeedback={showFeedback} />
         </div>
     );
 }
@@ -228,13 +235,79 @@ function KeywordContent({ response }) {
     );
 }
 
-function ExtraContent() {
+function FeeabackArea({ feedbackFormDisplay }) {
+    if (!feedbackFormDisplay) {
+        return <></>;
+    }
     return (
-        <div>
-            <p className="mt-20 text-small">
-                Các từ khoá được tham khảo từ các sách giáo khoa của NXB Giáo
-                dục Việt Nam. Liên hệ với chúng tôi tại đây.
-            </p>
+        <div className="mt-10 w-full bg">
+            <h2 className="font-bold text-green-800 text-4xl"> Góp ý</h2>
+            <form
+                onSubmit={(event) => {
+                    event.preventDefault();
+                    console.log(event.target.email.value);
+                    console.log(event.target.comment.value);
+                    alert(
+                        "Ý kiến của bạn đã được ghi nhận.\nCảm ơn bạn đã góp ý!"
+                    );
+                }}
+            >
+                <label
+                    for="email"
+                    class="mt-1 block text-base font-bold text-gray-700"
+                >
+                    Email
+                </label>
+                <div class="mt-1">
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        placeholder="Email"
+                    />
+                </div>
+                <label
+                    for="comment"
+                    class="mt-1 block text-base font-bold text-gray-700"
+                >
+                    Nội dung
+                </label>
+                <div class="mt-1">
+                    <textarea
+                        rows="4"
+                        name="comment"
+                        id="comment"
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
+                </div>
+                <button
+                    type="submit"
+                    className="mt-2 w-1/10 items-center px-4 py-2 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-lime-800 hover:bg-lime-700 focus:outline-none font-sans"
+                >
+                    Ghi nhận
+                </button>
+            </form>
         </div>
+    );
+}
+
+function Footer({ showFeedback }) {
+    return (
+        <footer className="bg-black fixed left-0 right-0 bottom-0 w-full text-center">
+            <div className="mx-auto max-w-4xl py-8 px-6">
+                <p className="text-center text-small leading-5 text-white">
+                    Các từ khoá được tham khảo từ các sách giáo khoa của NXB
+                    Giáo dục Việt Nam.
+                </p>
+                <a
+                    href="#"
+                    className="text-blue-500 underline underline-offset-1"
+                    onClick={showFeedback}
+                >
+                    Góp ý với chúng tôi.
+                </a>
+            </div>
+        </footer>
     );
 }
