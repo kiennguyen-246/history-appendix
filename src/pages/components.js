@@ -3,7 +3,7 @@ import { Combobox } from "@headlessui/react";
 
 const SEARCH_API = "http://localhost:3000/api/search";
 const FILTER_API = "http://localhost:3000/api/filter";
-const FEEDBACK_API = "http://localhost:3000/api/filter";
+const FEEDBACK_API = "http://localhost:3000/api/feedback";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -115,9 +115,12 @@ function SearchBox() {
                         const json = await htmlResponse.json();
                         console.log(event.target.value);
                         setFilteredkeyword(json.data);
+                        console.log(json.data);
                     }}
                     displayValue={(selectedKeyword) => {
-                        return selectedKeyword ? selectedKeyword.name : query;
+                        return selectedKeyword
+                            ? selectedKeyword.keyword
+                            : query;
                     }}
                 />
                 {filteredkeyword.length > 0 && (
@@ -143,7 +146,7 @@ function SearchBox() {
                                                 selected && "font-semibold"
                                             )}
                                         >
-                                            {Keyword.name}
+                                            {Keyword.keyword}
                                         </span>
 
                                         {selected && (
@@ -206,12 +209,12 @@ function KeywordContent({ response }) {
     return (
         <div>
             <h2 className="font-bold text-green-800 text-4xl mt-10">
-                {response.name}
+                {response.keyword}
             </h2>
             <p className="text-xl mt-2">{response.content}</p>
             <p className="italic text-gray-500 text-xl mt-2">
                 Tham khảo thêm tại trang {response.pageNumber}, chủ đề{" "}
-                {response.topic}, sách {response.textbook}.
+                {response.topic}, sách {response.bookName}.
             </p>
         </div>
     );
@@ -228,13 +231,13 @@ function FeeabackArea({ feedbackFormDisplay }) {
                 onSubmit={async (event) => {
                     event.preventDefault();
                     const email = event.target.email.value;
-                    const comment = event.target.comment.value;
+                    const feedback = event.target.feedback.value;
                     const httpResponse = await fetch(FEEDBACK_API, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ email, comment }),
+                        body: JSON.stringify({ email, feedback }),
                     });
                     alert(
                         "Ý kiến của bạn đã được ghi nhận.\nCảm ơn bạn đã góp ý!"
@@ -242,32 +245,33 @@ function FeeabackArea({ feedbackFormDisplay }) {
                 }}
             >
                 <label
-                    for="email"
-                    class="mt-1 block text-base font-bold text-gray-700"
+                    htmlFor="email"
+                    className="mt-1 block text-base font-bold text-gray-700"
                 >
                     Email
                 </label>
-                <div class="mt-1">
+                <div className="mt-1">
                     <input
                         type="email"
                         name="email"
                         id="email"
-                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm font-sans"
                         placeholder="Email"
+                        required
                     />
                 </div>
                 <label
-                    for="comment"
-                    class="mt-1 block text-base font-bold text-gray-700"
+                    htmlFor="feedback"
+                    className="mt-1 block text-base font-bold text-gray-700"
                 >
                     Nội dung
                 </label>
-                <div class="mt-1">
+                <div className="mt-1">
                     <textarea
                         rows="4"
-                        name="comment"
-                        id="comment"
-                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        name="feedback"
+                        id="feedback"
+                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm font-sans"
                     />
                 </div>
                 <button

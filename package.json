@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
+    "mysql2": "^3.6.5",
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18"
