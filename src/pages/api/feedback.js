@@ -1,4 +1,4 @@
-import { submitFeedback } from "../services/feedback";
+import { submitFeedback } from "../../services/feedback";
 
 export default async function handler(req, res) {
     if (req.method === "POST") {

@@ -1,4 +1,4 @@
-import { getSearchResult } from "../services/search";
+import { getSearchResult } from "../../services/search";
 
 export default async function handler(req, res) {
     if (req.method === "POST") {

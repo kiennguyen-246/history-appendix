@@ -1,4 +1,4 @@
-import { removeTone } from "../../utils/utils";
+import { removeTone } from "../utils/utils";
 import { mysqlConnection } from "./database";
 
 export async function getFilterResult(query) {
