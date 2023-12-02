@@ -4,9 +4,9 @@ import { Dialog, Transition } from "@headlessui/react";
 import { InboxIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import "dotenv/config";
 
-const SEARCH_API = process.env.API_HOST + "/api/search";
-const FILTER_API = process.env.API_HOST + "/api/filter";
-const FEEDBACK_API = process.env.API_HOST + "/api/feedback";
+const SEARCH_API = "/api/search";
+const FILTER_API = "/api/filter";
+const FEEDBACK_API = "/api/feedback";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
