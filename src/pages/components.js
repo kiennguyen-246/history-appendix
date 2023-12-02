@@ -2,10 +2,11 @@ import { useState, Fragment } from "react";
 import { Combobox } from "@headlessui/react";
 import { Dialog, Transition } from "@headlessui/react";
 import { InboxIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import "dotenv/config";
 
-const SEARCH_API = "http://localhost:3000/api/search";
-const FILTER_API = "http://localhost:3000/api/filter";
-const FEEDBACK_API = "http://localhost:3000/api/feedback";
+const SEARCH_API = process.env.API_HOST + "/api/search";
+const FILTER_API = process.env.API_HOST + "/api/filter";
+const FEEDBACK_API = process.env.API_HOST + "/api/feedback";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
