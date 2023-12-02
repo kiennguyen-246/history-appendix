@@ -2,7 +2,6 @@ import { useState, Fragment } from "react";
 import { Combobox } from "@headlessui/react";
 import { Dialog, Transition } from "@headlessui/react";
 import { InboxIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { set } from "lodash";
 
 const SEARCH_API = "http://localhost:3000/api/search";
 const FILTER_API = "http://localhost:3000/api/filter";
