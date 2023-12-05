@@ -1,13 +1,10 @@
-import { mysqlConnection } from "./database";
-import env from "dotenv";
-import "dotenv/config"
+import { sql } from "@vercel/postgres";
 
 export async function getSearchResult(keyword) {
-    const [rows, fields] = await mysqlConnection.execute(
-        `SELECT Keywords.*, Books.bookName
+    const result = await sql`
+        SELECT Keywords.*, Books.bookName
          FROM Keywords
          JOIN Books ON Keywords.bookCode = Books.bookCode
-         WHERE keyword = '${keyword}'`
-    );
-    return rows.length > 0 ? rows[0] : null;
+         WHERE keyword = ${keyword};`;
+    return result.rows.length > 0 ? result.rows[0] : null;
 }
