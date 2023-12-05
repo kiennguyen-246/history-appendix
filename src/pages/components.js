@@ -242,8 +242,8 @@ function KeywordContent({ response }) {
             </h2>
             <p className="text-xl mt-2">{response.content}</p>
             <p className="italic text-gray-500 text-xl mt-2">
-                Tham khảo thêm tại trang {response.pageNumber}, chủ đề{" "}
-                {response.topic}, sách {response.bookName}.
+                Tham khảo thêm tại trang {response.pagenumber}, chủ đề{" "}
+                {response.topic}, sách {response.bookname}.
             </p>
         </div>
     );
