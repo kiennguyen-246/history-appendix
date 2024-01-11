@@ -2,10 +2,11 @@
 
 import { Disclosure } from "@headlessui/react";
 import { Montserrat } from "next/font/google";
-
+import Image from "next/image";
 import "dotenv/config";
+
 const FEEDBACK_API = "/api/feedback";
-const montserrat = Montserrat({subsets: ['vietnamese']});
+const montserrat = Montserrat({ subsets: ["vietnamese"] });
 
 export default function Home() {
     return (
@@ -36,14 +37,11 @@ function Navbar() {
                         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                             <div className="flex h-28 justify-between">
                                 <div className="flex flex-shrink-0 items-end">
-                                    <img
-                                        className="block h-28 w-auto lg:hidden"
-                                        src="logo.png"
-                                        alt="Logo"
-                                    />
-                                    <img
+                                    <Image
                                         className="hidden h-28 w-auto lg:block"
-                                        src="logo.png"
+                                        src="/logo.png"
+                                        width={220}
+                                        height={100}
                                         alt="Logo"
                                     />
                                 </div>
@@ -100,19 +98,16 @@ function Content() {
                                 "Giới hạn là 10000 ký tự. Xin hãy viết ngắn hơn."
                             );
                         } else {
-                            const httpResponse = await fetch(
-                                FEEDBACK_API,
-                                {
-                                    method: "POST",
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                    },
-                                    body: JSON.stringify({
-                                        email,
-                                        feedback,
-                                    }),
-                                }
-                            );
+                            const httpResponse = await fetch(FEEDBACK_API, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    email,
+                                    feedback,
+                                }),
+                            });
                             alert(
                                 "Ý kiến của bạn đã được ghi nhận.\nCảm ơn bạn đã góp ý!"
                             );

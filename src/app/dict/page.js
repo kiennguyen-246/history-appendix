@@ -3,10 +3,8 @@
 import { useState, useEffect, Fragment } from "react";
 import { Montserrat } from "next/font/google";
 import { Disclosure, Dialog, Transition } from "@headlessui/react";
-import {
-    ExclamationTriangleIcon,
-    XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import "dotenv/config";
 
 const GET_ALL_API = "/api/getall";
@@ -42,14 +40,11 @@ function Navbar() {
                         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                             <div className="flex h-28 justify-between">
                                 <div className="flex flex-shrink-0 items-end">
-                                    <img
-                                        className="block h-28 w-auto lg:hidden"
-                                        src="logo.png"
-                                        alt="Logo"
-                                    />
-                                    <img
+                                    <Image
                                         className="hidden h-28 w-auto lg:block"
-                                        src="logo.png"
+                                        src="/logo.png"
+                                        width={220}
+                                        height={100}
                                         alt="Logo"
                                     />
                                 </div>
@@ -117,7 +112,7 @@ function Content() {
                                 dict[letter] &&
                                 dict[letter].map((item) => {
                                     return (
-                                        <a
+                                        <a key={letter}
                                             onClick={() => {
                                                 setOpen(true);
                                                 const response = fetch(

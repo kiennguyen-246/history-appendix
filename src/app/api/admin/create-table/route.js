@@ -1,9 +1,8 @@
 import { sql } from "@vercel/postgres";
-import { NextResponse } from "next/server";
 
 export const runtime = "edge";
 
-export default async function handle({ req, res }) {
+export async function POST({ req }) {
     const result1 = await sql`
                 CREATE TABLE IF NOT EXISTS Books (
                     bookCode VARCHAR(10) NOT NULL PRIMARY KEY,
@@ -25,5 +24,5 @@ export default async function handle({ req, res }) {
                     email VARCHAR(255) NOT NULL,
                     feedback VARCHAR(2047) NOT NULL
                 );`;
-    return NextResponse.json({ result1, result2, result3 }, { status: 200 });
+    return Response.json({ result1, result2, result3 }, { status: 200 });
 }

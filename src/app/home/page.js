@@ -1,14 +1,11 @@
 "use client";
 
-import { useState, Fragment } from "react";
+import { useState } from "react";
 import { Combobox } from "@headlessui/react";
-import { Dialog, Transition, Disclosure, Menu } from "@headlessui/react";
-import {
-    MagnifyingGlassIcon,
-    BellIcon,
-    XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { Disclosure } from "@headlessui/react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Asap, Montserrat } from "next/font/google";
+import Image from "next/image";
 import "dotenv/config";
 
 const SEARCH_API = "/api/search";
@@ -34,7 +31,6 @@ function Body() {
     const [init, setInit] = useState(false);
     const [found, setFound] = useState(false);
     const [pending, setPending] = useState(false);
-    const [feedbackFormDisplay, setfeedbackFormDisplay] = useState(false);
 
     const doSetQuery = async () => {
         setFound(false);
@@ -109,14 +105,11 @@ function Navbar() {
                         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                             <div className="flex h-28 justify-between">
                                 <div className="flex flex-shrink-0 items-end">
-                                    <img
-                                        className="block h-28 w-auto lg:hidden"
-                                        src="logo.png"
-                                        alt="Logo"
-                                    />
-                                    <img
+                                    <Image
                                         className="hidden h-28 w-auto lg:block"
-                                        src="logo.png"
+                                        src="/logo.png"
+                                        width={220}
+                                        height={100}
                                         alt="Logo"
                                     />
                                 </div>
