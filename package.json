@@ -1,6 +1,6 @@
 {
   "name": "history_appendix",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -15,7 +15,8 @@
     "mysql2": "^3.6.5",
     "next": "14.0.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "sharp": "^0.33.1"
   },
   "devDependencies": {
     "@heroicons/react": "^2.0.18",

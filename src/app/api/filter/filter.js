@@ -1,4 +1,4 @@
-import { removeTone } from "../utils/utils";
+import { removeTone } from "../../utils/utils";
 import { sql } from "@vercel/postgres";
 
 export async function getFilterResult(query) {
