@@ -1,4 +1,4 @@
-import { submitFeedback } from "../../services/feedback";
+import { submitFeedback } from "./feedback";
 
 export async function POST(req) {
     const { email, feedback } = await req.json();

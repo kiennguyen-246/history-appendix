@@ -1,4 +1,4 @@
-import { getFilterResult } from "../../services/filter";
+import { getFilterResult } from "./filter";
 
 export async function POST(req) {
     const { query } = await req.json();

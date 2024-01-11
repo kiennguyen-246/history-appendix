@@ -1,9 +1,11 @@
 "use client";
 
 import { Disclosure } from "@headlessui/react";
+import { Montserrat } from "next/font/google";
 
 import "dotenv/config";
 const FEEDBACK_API = "/api/feedback";
+const montserrat = Montserrat({subsets: ['vietnamese']});
 
 export default function Home() {
     return (
@@ -15,7 +17,7 @@ export default function Home() {
 
 function Body() {
     return (
-        <div className="container m-auto max-w-4xl font-['montserrat']">
+        <div className={`${montserrat.className} container m-auto max-w-4xl`}>
             <Navbar />
             <div className="content-wrap m-auto max-w-2xl">
                 <Content />
@@ -54,7 +56,7 @@ function Navbar() {
                                         Trang chủ
                                     </a>
                                     <a
-                                        href="#"
+                                        href="dict"
                                         className="inline-flex items-end border-b-2 border-transparent px-6 pt-1 pb-8 text-lg font-bold rounded-b-3xl text-gray-500 hover:bg-gray-300 hover:text-gray-700"
                                     >
                                         Từ điển
@@ -98,16 +100,19 @@ function Content() {
                                 "Giới hạn là 10000 ký tự. Xin hãy viết ngắn hơn."
                             );
                         } else {
-                            const httpResponse = await fetch(FEEDBACK_API, {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify({
-                                    email,
-                                    feedback,
-                                }),
-                            });
+                            const httpResponse = await fetch(
+                                FEEDBACK_API,
+                                {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                        email,
+                                        feedback,
+                                    }),
+                                }
+                            );
                             alert(
                                 "Ý kiến của bạn đã được ghi nhận.\nCảm ơn bạn đã góp ý!"
                             );
@@ -116,7 +121,7 @@ function Content() {
                 >
                     <label
                         htmlFor="email"
-                        className="mt-1 block text-base font-bold text-gray-700 font-[montserrat]"
+                        className={`${montserrat.className} mt-1 block text-base font-bold text-gray-700`}
                     >
                         Email
                     </label>
@@ -132,7 +137,7 @@ function Content() {
                     </div>
                     <label
                         htmlFor="feedback"
-                        className="mt-4 block text-base font-bold text-gray-700 font-[montserrat]"
+                        className={`${montserrat.className} mt-4 block text-base font-bold text-gray-700`}
                     >
                         Bạn muốn chia sẻ điều gì?
                     </label>

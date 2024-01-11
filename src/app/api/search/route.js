@@ -1,4 +1,4 @@
-import { getSearchResult } from "../../services/search";
+import { getSearchResult } from "./search";
 
 export async function POST(req) {
     const { keyword } = await req.json();

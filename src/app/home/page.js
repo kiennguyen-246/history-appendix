@@ -8,13 +8,13 @@ import {
     BellIcon,
     XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { Asap } from "next/font/google";
+import { Asap, Montserrat } from "next/font/google";
 import "dotenv/config";
 
 const SEARCH_API = "/api/search";
 const FILTER_API = "/api/filter";
-const FEEDBACK_API = "/api/feedback";
 const asap = Asap({ subsets: ["vietnamese"] });
+const montserrat = Montserrat({ subsets: ["vietnamese"] });
 
 export default function Home() {
     return (
@@ -84,7 +84,7 @@ function Body() {
     };
 
     return (
-        <div className="container m-auto max-w-4xl font-['montserrat']">
+        <div className={`${montserrat.className} container m-auto max-w-4xl`}>
             <Navbar />
             <div className="content-wrap m-auto max-w-2xl">
                 <SearchArea onSubmit={onSearch} />
@@ -129,7 +129,7 @@ function Navbar() {
                                         Trang chủ
                                     </a>
                                     <a
-                                        href="#"
+                                        href="dict"
                                         className="inline-flex items-end border-b-2 border-transparent px-6 pt-1 pb-8 text-lg font-bold rounded-b-3xl text-gray-500 hover:bg-gray-300 hover:text-gray-700"
                                     >
                                         Từ điển
