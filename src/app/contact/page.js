@@ -1,7 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Disclosure } from "@headlessui/react";
 import { Montserrat } from "next/font/google";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import "dotenv/config";
 
@@ -16,10 +18,27 @@ export default function Home() {
     );
 }
 
+function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+}
+
 function Body() {
+    const [largeViewport, setLargeViewport] = useState(window.innerWidth > 650);
+
+    const updateMedia = () => {
+        setLargeViewport(window.innerWidth > 650);
+    };
+
+    useEffect(() => {
+        window.addEventListener("resize", updateMedia);
+        return () => window.removeEventListener("resize", updateMedia);
+    });
+
     return (
-        <div className={`${montserrat.className} container m-auto max-w-4xl`}>
-            <Navbar />
+        <div
+            className={`${montserrat.className} container m-auto max-w-4xl px-2`}
+        >
+            <Navbar largeViewport={largeViewport} />
             <div className="content-wrap m-auto max-w-2xl">
                 <Content />
                 <div style={{ marginTop: "6rem" }}>.</div>
@@ -28,7 +47,15 @@ function Body() {
     );
 }
 
-function Navbar() {
+function Navbar({ largeViewport }) {
+    if (largeViewport) {
+        return <HNav />;
+    } else {
+        return <VNav />;
+    }
+}
+
+function HNav() {
     return (
         <header className="border-b-2 border-gray-500 mb-20">
             <Disclosure as="nav" className="pb-4">
@@ -38,10 +65,10 @@ function Navbar() {
                             <div className="flex h-28 justify-between">
                                 <div className="flex flex-shrink-0 items-end">
                                     <Image
-                                        className="hidden h-28 w-auto lg:block"
+                                        className="hidden h-20 w-auto lg:block"
                                         src="/logo.png"
-                                        width={220}
-                                        height={100}
+                                        width={132}
+                                        height={60}
                                         alt="Logo"
                                     />
                                 </div>
@@ -81,6 +108,59 @@ function Navbar() {
     );
 }
 
+function VNav() {
+    const [menuDisplay, setMenuDisplay] = useState(false);
+
+    const navigation = [
+        { name: "Trang chủ", href: "home", current: false },
+        { name: "Từ điển", href: "dict", current: false },
+        { name: "Thông tin", href: "#", current: false },
+        { name: "Liên hệ", href: "contact", current: true },
+    ];
+    return (
+        <div className="border-b-2 border-gray-500 mb-10">
+            <div className="flex h-16 justify-between">
+                <div className="flex flex-shrink-0 items-end">
+                    <Image
+                        className=" h-16 w-auto lg:block"
+                        src="/logo.png"
+                        width={132}
+                        height={60}
+                        alt="Logo"
+                    />
+                </div>
+                <button
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setMenuDisplay(!menuDisplay);
+                    }}
+                >
+                    <Bars3Icon className="h-6 w-6 float-right" />
+                </button>
+            </div>
+
+            {menuDisplay && (
+                <nav className="space-y-1" aria-label="Sidebar">
+                    {navigation.map((item) => (
+                        <a
+                            key={item.name}
+                            href={item.href}
+                            className={classNames(
+                                item.current
+                                    ? "bg-violet-700 text-white"
+                                    : "text-gray-500 hover:bg-gray-300 hover:text-gray-700",
+                                "flex items-center px-3 py-2 text-sm font-bold"
+                            )}
+                            aria-current={item.current ? "page" : undefined}
+                        >
+                            <span className="truncate">{item.name}</span>
+                        </a>
+                    ))}
+                </nav>
+            )}
+        </div>
+    );
+}
 function Content() {
     return (
         <div>
@@ -95,7 +175,7 @@ function Content() {
                         const feedback = event.target.feedback.value;
                         if (feedback.length > 10000) {
                             alert(
-                                "Giới hạn là 10000 ký tự. Xin hãy viết ngắn hơn."
+                                "Giới hạn là 10000 ký tự. Vui lòng trình bày ngắn gọn hơn."
                             );
                         } else {
                             const httpResponse = await fetch(FEEDBACK_API, {
