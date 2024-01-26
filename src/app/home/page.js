@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Combobox } from "@headlessui/react";
 import { Disclosure } from "@headlessui/react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import { Asap, Montserrat } from "next/font/google";
 import Image from "next/image";
 import "dotenv/config";
@@ -31,6 +31,19 @@ function Body() {
     const [init, setInit] = useState(false);
     const [found, setFound] = useState(false);
     const [pending, setPending] = useState(false);
+    const [largeViewport, setLargeViewport] = useState(true);
+
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+        setLargeViewport(window.innerWidth > 650);
+        window.addEventListener("resize", () => {
+            setLargeViewport(window.innerWidth > 650);
+        });
+        return () =>
+            window.removeEventListener("resize", () => {
+                setLargeViewport(window.innerWidth > 650);
+            });
+    }, []);
 
     const doSetQuery = async () => {
         setFound(false);
@@ -80,8 +93,10 @@ function Body() {
     };
 
     return (
-        <div className={`${montserrat.className} container m-auto max-w-4xl`}>
-            <Navbar />
+        <div
+            className={`${montserrat.className} container m-auto max-w-4xl px-2`}
+        >
+            <Navbar largeViewport={largeViewport} />
             <div className="content-wrap m-auto max-w-2xl">
                 <SearchArea onSubmit={onSearch} />
                 <Content
@@ -96,7 +111,15 @@ function Body() {
     );
 }
 
-function Navbar() {
+function Navbar({ largeViewport }) {
+    if (largeViewport) {
+        return <HNav />;
+    } else {
+        return <VNav />;
+    }
+}
+
+function HNav() {
     return (
         <header className="border-b-2 border-gray-500 mb-20">
             <Disclosure as="nav" className="pb-4">
@@ -106,10 +129,10 @@ function Navbar() {
                             <div className="flex h-28 justify-between">
                                 <div className="flex flex-shrink-0 items-end">
                                     <Image
-                                        className="hidden h-28 w-auto lg:block"
+                                        className="hidden h-20 w-auto lg:block"
                                         src="/logo.png"
-                                        width={220}
-                                        height={100}
+                                        width={132}
+                                        height={60}
                                         alt="Logo"
                                     />
                                 </div>
@@ -146,6 +169,60 @@ function Navbar() {
                 )}
             </Disclosure>
         </header>
+    );
+}
+
+function VNav() {
+    const [menuDisplay, setMenuDisplay] = useState(false);
+
+    const navigation = [
+        { name: "Trang chủ", href: "home", current: true },
+        { name: "Từ điển", href: "dict", current: false },
+        { name: "Thông tin", href: "#", current: false },
+        { name: "Liên hệ", href: "contact", current: false },
+    ];
+    return (
+        <div className="border-b-2 border-gray-500 mb-10">
+            <div className="flex h-16 justify-between">
+                <div className="flex flex-shrink-0 items-end">
+                    <Image
+                        className=" h-16 w-auto lg:block"
+                        src="/logo.png"
+                        width={132}
+                        height={60}
+                        alt="Logo"
+                    />
+                </div>
+                <button
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setMenuDisplay(!menuDisplay);
+                    }}
+                >
+                    <Bars3Icon className="h-6 w-6 float-right" />
+                </button>
+            </div>
+
+            {menuDisplay && (
+                <nav className="space-y-1" aria-label="Sidebar">
+                    {navigation.map((item) => (
+                        <a
+                            key={item.name}
+                            href={item.href}
+                            className={classNames(
+                                item.current
+                                    ? "bg-violet-700 text-white"
+                                    : "text-gray-500 hover:bg-gray-300 hover:text-gray-700",
+                                "flex items-center px-3 py-2 text-sm font-bold"
+                            )}
+                            aria-current={item.current ? "page" : undefined}
+                        >
+                            <span className="truncate">{item.name}</span>
+                        </a>
+                    ))}
+                </nav>
+            )}
+        </div>
     );
 }
 
@@ -301,7 +378,7 @@ function KeywordContent({ response }) {
                 Trang {response.pagenumber} | Chủ đề {response.topic} | Sách{" "}
                 {response.bookname}
             </p>
-            <p className="text-xl mt-6">{response.content}</p>
+            <p className="text-lg mt-6">{response.content}</p>
         </div>
     );
 }
