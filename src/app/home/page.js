@@ -31,16 +31,19 @@ function Body() {
     const [init, setInit] = useState(false);
     const [found, setFound] = useState(false);
     const [pending, setPending] = useState(false);
-    const [largeViewport, setLargeViewport] = useState(window.innerWidth > 650);
-
-    const updateMedia = () => {
-        setLargeViewport(window.innerWidth > 650);
-    };
+    const [largeViewport, setLargeViewport] = useState(true);
 
     useEffect(() => {
-        window.addEventListener("resize", updateMedia);
-        return () => window.removeEventListener("resize", updateMedia);
-    });
+        if (typeof window === "undefined") return;
+        setLargeViewport(window.innerWidth > 650);
+        window.addEventListener("resize", () => {
+            setLargeViewport(window.innerWidth > 650);
+        });
+        return () =>
+            window.removeEventListener("resize", () => {
+                setLargeViewport(window.innerWidth > 650);
+            });
+    }, []);
 
     const doSetQuery = async () => {
         setFound(false);
